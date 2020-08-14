@@ -1,3 +1,5 @@
 # Ignore Following
 db.sqlite3
 travelBlog/__pycache__/
+travelEntries/__pycache__/
+travelEntries/migrations/__pycache__/
