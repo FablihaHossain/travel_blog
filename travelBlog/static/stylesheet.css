@@ -1,0 +1,17 @@
+.body-html{
+	font-family: Times New Roman, serif;
+	background-color:pink;
+	margin:0px;
+	padding: 0px;
+	color: black;
+	height: auto;
+	position: relative;
+}
+
+.body-size {
+    height: auto;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    align-content: center;
+}
