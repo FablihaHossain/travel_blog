@@ -1,5 +1,9 @@
 # Ignore Following
 db.sqlite3
+__pycache__/
 travelBlog/__pycache__/
 travelEntries/__pycache__/
 travelEntries/migrations/__pycache__/
+
+# Config File with DB Credentials
+config.py
