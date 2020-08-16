@@ -7,3 +7,6 @@ travelEntries/migrations/__pycache__/
 
 # Config File with DB Credentials
 config.py
+
+# Directory Containing Entry Images
+entryImages/
