@@ -20,7 +20,9 @@ from django.conf.urls.static import static
 from travelEntries import views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index, name = 'index')
+    path('', views.index, name = 'index'),
+    path('login/', views.login, name = 'login'),
+    path('register/', views.register, name = 'register')
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
