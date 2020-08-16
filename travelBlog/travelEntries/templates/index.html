@@ -8,6 +8,31 @@
 <body class = "body-html body-size">
 	<p> This Will be the Travel Blog initial page :) </p>
 	<h6> Created by Fabliha Hossain </h6>
+
+	<p> User Details </p>
+	{% for user in users %}
+		{{user.name}}
+		{{user.usename}}
+		{{user.email}}
+		<br>
+	{% endfor %}
+	<br><br>
+	<p> Entry Details with photos </p>
+	{% for entry in entries %}
+		<br>
+		{{entry.title}}
+		{% for x in entry.descriptions %}
+			<br>{{x}}
+		{% endfor %}
+		{{entry.description}}
+		<br>
+		{% for image in images %}
+			{% if image.entry.id == entry.id %}
+				<img src="{{image.image.url}}" height="300" width="300">
+				<br>
+			{% endif %}
+		{% endfor %}
+	{% endfor %}
 </body>
 {% endblock content %}
 </html>
