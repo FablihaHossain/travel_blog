@@ -2,7 +2,30 @@
 <html>
 <head>
 	{% block title %}<title> Travel Blog </title>{% endblock %}
+	{% block styles %}
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="{% static 'stylesheet.css' %}">
+	{% endblock styles %}
+
+	<!-- Navigation Bar for Site --> 
+	<nav class = "navbar navbar-expand-sm justify-content-center">
+		<a class = "navbar-brand nav-words navbar-text" href="{% url 'index' %}"> Travel Blog </a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class= "collapse navbar-collapse" id="navbarNav">
+		<!-- Login Route -->
+			<li class = "nav-item">
+				<a class = "nav-link nav-words navbar-text" href="{% url 'login' %}"> Login </a>
+			</li>
+		<!-- Registration Route -->
+			<li class = "nav-item">
+				<a class = "nav-link nav-words navbar-text" href="{% url 'register' %}"> Register </a>
+			</li>
+		</div>
+	</nav>
 </head>
 {% block content %}
 <body class = "body-html body-size">
