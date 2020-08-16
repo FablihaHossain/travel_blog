@@ -26,12 +26,17 @@ class Entry(models.Model):
 class EntryImage(models.Model):
 	entry = models.ForeignKey('Entry', on_delete=models.CASCADE)
 	# Attempting to create a new path file for each entry
-	pathname = 'entryImages/%s' % (entry)
-	image = models.ImageField(upload_to = pathname)
+	#pathname = 'entryImages/%s' % (entry.name)
+	
+
+	def get_upload_path(instance, filename):
+		return 'entryImages/entry_{0}/{1}'.format(instance.entry.id, filename)
+
+	image = models.ImageField(upload_to = get_upload_path)
 
 	# Print statement for Python Shell	
-	def __str__(self):
-		return self.entry
+	# def __str__(self):
+	# 	return self.entry
 
 # Credit to https://docs.djangoproject.com/en/3.1/ref/contrib/postgres/fields/#arrayfield
 # Credit to https://github.com/gradam/django-better-admin-arrayfield
