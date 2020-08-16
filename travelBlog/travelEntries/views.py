@@ -12,3 +12,9 @@ def index(request):
 	images = EntryImage.objects.all()
 
 	return render(request, 'index.html', {'users':users, 'entries':entries, 'images':images})
+
+def login(request):
+	return render(request, 'login.html')
+
+def register(request):
+	return render(request, 'registration.html')
