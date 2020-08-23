@@ -5,7 +5,20 @@
 </head>
 {% block content %}
 <body class = "body-html body size">
-	<p> Login Page </p>
+	<div class ="jumbotron">
+		<div class = "container text-center form-words"> Log Into Your Account Here </div>
+		<div class="text-center">
+			<label class = "text-center form-words"> Username </label>
+			<input type = "username" name = "username">
+		</div>	
+		<div class="text-center">
+			<label class = "text-center form-words"> Password </label>
+			<input type="password" name="password">
+		</div>
+		<div class = "text-center">
+			<button type = "submit" class = "btn btn-primary btn-primary-block"> Login </button>
+		</div>
+	</div>
 </body>
 {% endblock content %}
 </html>
