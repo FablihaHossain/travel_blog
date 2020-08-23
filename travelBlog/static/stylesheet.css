@@ -1,6 +1,6 @@
 .body-html{
-	font-family: Times New Roman, serif;
-	background-color:pink;
+	font-family: Perpetua, serif;
+	background-color:#ffe6ff;
 	margin:0px;
 	padding: 0px;
 	color: black;
@@ -20,7 +20,8 @@
 	height: 55px;
 	width: auto;
 	list-style: none;
-	background-color:orange;
+	background-color:#993366;
+	font-family: Copperplate, sans-serif;
 }
 
 .nav-words{
@@ -28,16 +29,26 @@
     text-decoration: none;
 }
 .navbar-text:hover{
-	color: pink;
+	color: white;
 }
 
 .btn-primary{
-	background-color:#a70101e8;
+	background-color:#993366;
 	color:white;
 	width:150px; 
 	align-items: center;
+	font-family: Copperplate, sans-serif;
 }
 
 .btn-primary-block:hover{
-	background-color: #a70101ad;
+	background-color: #d279a6;
+}
+
+.jumbotron{
+	background: transparent;
+	align-items: center;
+}
+
+.form-words{
+	font-family: Copperplate, sans-serif;
 }
