@@ -1,0 +1,23 @@
+{% extends "index.html" %}
+<html>
+<head>
+	{% block title %}<title> View Blog Entry </title> {% endblock title %}
+</head>
+{% block content %}
+<body class = "body-html body-size">
+	{{entry.title}}
+		{% for x in entry.descriptions %}
+			<br>{{x}}
+		{% endfor %}
+		{{entry.description}}
+		<br>
+		{% for image in images %}
+			{% if image.entry.id == entry.id %}
+				<img src="{{image.image.url}}" height="300" width="300">
+				<br>
+			{% endif %}
+		{% endfor %}
+
+</body>
+{% endblock content %}
+</html>
