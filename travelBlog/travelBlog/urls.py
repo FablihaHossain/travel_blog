@@ -22,7 +22,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name = 'index'),
     path('login/', views.login, name = 'login'),
-    path('register/', views.register, name = 'register')
+    path('register/', views.register, name = 'register'),
+    path('newEntry/', views.newEntry, name = 'newEntry'),
+    path('viewEntry/<int:entry_id>/', views.viewEntry, name = 'viewEntry')
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
