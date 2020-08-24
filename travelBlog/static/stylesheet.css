@@ -29,7 +29,7 @@
     text-decoration: none;
 }
 .navbar-text:hover{
-	color: white;
+	color: #d279a6;
 }
 
 .btn-primary{
@@ -47,8 +47,22 @@
 .jumbotron{
 	background: transparent;
 	align-items: center;
+	position: relative;
+	height: auto;
+	padding:3rem 10rem;
 }
 
 .form-words{
 	font-family: Copperplate, sans-serif;
+	font-size: 1rem;
+}
+
+.form-fields{
+    padding-right: 30px;
+    padding-left: 20px;
+}
+
+@media screen and (max-width: 600px) {
+	.jumbotron.responsive {position: relative;}
+	.body-html.responsive {position: relative;}
 }
