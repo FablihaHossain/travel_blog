@@ -5,32 +5,34 @@
 </head>
 {% block content %}
 <body class = "body-html body-size">
-	<div class = "jumbotron">
-		<div class="container text-center form-words" style="height: 40px"> Please Provide The Following Information </div>
-		<div class="form-group text-center form-fields">
-			<label class = "text-center form-words"> Name </label>
-			<input type="name" name="name">
-		</div>
+	<form action="{% url 'register' %}" method = post>
+		<div class = "jumbotron">
+			<div class="container text-center form-words" style="height: 40px"> Please Provide The Following Information </div>
+			<div class="form-group text-center form-fields">
+				<label class = "text-center form-words"> Name </label>
+				<input type="name" name="name">
+			</div>
 
-		<div class="form-group text-center form-fields">
-			<label class = "text-center form-words"> Email </label>
-			<input type="email" name="email">
-		</div>
+			<div class="form-group text-center form-fields">
+				<label class = "text-center form-words"> Email </label>
+				<input type="email" name="email">
+			</div>
 
-		<div class="form-group text-center form-fields">
-			<label class = "text-center form-words"> Username </label>
-			<input type="username" name="username">
-		</div>
+			<div class="form-group text-center form-fields">
+				<label class = "text-center form-words"> Username </label>
+				<input type="username" name="username">
+			</div>
 
-		<div class="form-group text-center form-fields">
-			<label class = "text-center form-words"> Password </label>
-			<input type="password" name="password">
-		</div>
+			<div class="form-group text-center form-fields">
+				<label class = "text-center form-words"> Password </label>
+				<input type="password" name="password">
+			</div>
 
-		<div class = "form-group text-center">
-			<button type = "submit" class = "btn btn-primary btn-primary-block"> Register </button>
+			<div class = "form-group text-center">
+				<button type = "submit" class = "btn btn-primary btn-primary-block"> Register </button>
+			</div>
 		</div>
-	</div>
+	</form>
 </body>
 {% endblock content %}
 </html>
