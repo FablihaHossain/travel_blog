@@ -5,17 +5,21 @@
 </head>
 {% block content %}
 <body class = "body-html body size">
+	<h2> {{ message }}</h2>
 	<form action="{% url 'login' %}" method = post>
+		<!-- Django Cross site scripting protection -->
+		{% csrf_token %}
 		<div class ="jumbotron">
 			<div class = "container text-center form-words" style="height: 40px"> Log Into Your Account Here </div>
-			<div class="form-group text-center form-fields">
+			{{loginform}}
+			<!-- <div class="form-group text-center form-fields">
 				<label class = "text-center form-words"> Username </label>
 				<input type = "username" name = "username">
 			</div>	
 			<div class="form-group text-center form-fields">
 				<label class = "text-center form-words"> Password </label>
 				<input type="password" name="password">
-			</div>
+			</div> -->
 			<div class = "text-center">
 				<button type = "submit" class = "btn btn-primary btn-primary-block"> Login </button>
 			</div>
