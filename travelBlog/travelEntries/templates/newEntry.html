@@ -6,6 +6,8 @@
 {% block content %}
 <body class = "body-html body-size">
 	<form action="{% url 'newEntry' %}" method = post>
+		<!-- Django Cross site scripting protection -->
+		{% csrf_token %}
 		<div class ="jumbotron">
 			<div class = "container text-center form-words" style="height: 40px"> Add A New Travel Entry Here </div>
 			<div class="form-group text-center form-fields">
