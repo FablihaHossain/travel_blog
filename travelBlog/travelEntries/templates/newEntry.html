@@ -5,7 +5,7 @@
 </head>
 {% block content %}
 <body class = "body-html body-size">
-	<form action="{% url 'newEntry' %}" method = post>
+	<form enctype="multipart/form-data" action="{% url 'newEntry' %}" method = post>
 		<!-- Django Cross site scripting protection -->
 		{% csrf_token %}
 		<div class ="jumbotron">
