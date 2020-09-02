@@ -31,12 +31,32 @@ def login(request):
 # Registration Page
 def register(request):
 	if request.method == 'POST':
-		register_form = RegistrationForm(request.POST)
+		# getting all the current registration information
+		updated_request = request.POST.copy()
+		# updating the role of the user 
+		updated_request.update({'role': 'G'})
+		# putting all updated information into the role
+		register_form = RegistrationForm(updated_request)
+		#register_form = RegistrationForm(request.POST)
+
+		#role = request.POST['role']
+		# checking if registration form is valid
 		if register_form.is_valid():
-			message = 'You Entered name: %s, email: %s, username: %s, password: %s' % (register_form.cleaned_data['name'],
+			#register_form.cleaned_data['role'] = 'General User'
+			message = 'You Entered name: %s, email: %s, username: %s, password: %s, role:%s' % (register_form.cleaned_data['name'],
 				register_form.cleaned_data['email'],
 				register_form.cleaned_data['username'],
-				register_form.cleaned_data['password'])
+				register_form.cleaned_data['password'],
+				register_form.cleaned_data['role'])
+
+			#new_user = register_form.save(commit=False)
+			#print(new_user.role)
+			#new_user.role = 'G'
+			#print(new_user.role)
+			#new_user.save()
+			# saving new user
+			register_form.save()
+			# creating new form 
 			new_Form = RegistrationForm()
 			return render(request, 'registration.html', {'registrationform':new_Form, 'message':message})
 	else:
@@ -53,3 +73,6 @@ def viewEntry(request, entry_id):
 	except Entry.DoesNotExist:
 		raise Http404(f'Entry with id {entry_id} does not exist')
 	return render(request, 'viewEntry.html', {'entry':entry,'images':images})
+
+# Credit to https://stackoverflow.com/questions/20177779/how-can-i-change-form-field-values-after-calling-the-is-valid-method/45050312
+# Credit to https://stackoverflow.com/questions/18534307/change-a-form-value-before-validation-in-django-form
