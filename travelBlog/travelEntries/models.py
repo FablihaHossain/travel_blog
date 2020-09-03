@@ -1,6 +1,7 @@
 from django.db import models
 #from django.contrib.postgres.fields import ArrayField
 from django_better_admin_arrayfield.models.fields import ArrayField
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 # User Model 
 class User(models.Model):
@@ -20,6 +21,7 @@ class Entry(models.Model):
 	title = models.CharField(max_length = 400, blank = False)
 	# Each entry belongs to one user in the database
 	author = models.ForeignKey('User', on_delete=models.CASCADE)
+	numOfDescriptions = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
 	descriptions = ArrayField(models.CharField(max_length = 500), size = 5)
 
 	# Print statement for Python Shell and Admin Functionality
@@ -41,3 +43,4 @@ class EntryImage(models.Model):
 # Credit to https://docs.djangoproject.com/en/3.1/ref/contrib/postgres/fields/#arrayfield
 # Credit to https://github.com/gradam/django-better-admin-arrayfield
 # Credit to https://docs.djangoproject.com/en/3.1/ref/models/fields/#django.db.models.FileField.upload_to
+# Credit to https://www.reddit.com/r/django/comments/2q5u0p/way_to_make_a_min_and_max_values_restriction_on_a/
