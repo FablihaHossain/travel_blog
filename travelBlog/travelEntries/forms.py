@@ -17,15 +17,17 @@ class NewEntryForm(forms.ModelForm):
 	class Meta:
 		model = Entry
 		fields = ['title', 'author', 'numOfDescriptions', 'descriptions']
-	# descriptions will be separated based on commas
+	# Descriptions will be separated based on commas
 	descriptions = SimpleArrayField(forms.CharField(max_length=100))
 
-
+class EntryImageForm(forms.ModelForm):
+	class Meta:
+		model = EntryImage
+		fields = ['entry', 'image']
+		widgets = {'image':forms.ImageField}
 # extra notes
 # example = ChoiceField(label="Example", choices = [('1'), ('2')....])
 # widget = forms.Textarea
 # image = forms.ImageField() => add request.FILES alongside request.POST in views.py
-
-# Note to self: Perhaps add another field into Entry model that keeps track of how many descriptions there will be
 
 # Credit to https://stackoverflow.com/questions/56218408/how-to-define-arrayfield-to-django-forms
