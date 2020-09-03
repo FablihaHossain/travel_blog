@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import User, Entry, EntryImage
 from django.http import Http404
-from .forms import LoginForm, RegistrationForm
+from .forms import LoginForm, RegistrationForm, NewEntryForm
 
 # Basic Route for the Site
 def index(request):
@@ -64,7 +64,15 @@ def register(request):
 		return render(request, 'registration.html', {'registrationform':register_form})
 
 def newEntry(request):
-	return render(request, 'newEntry.html')
+	if request.method == 'POST':
+		entry_form = NewEntryForm(request.POST)
+		if entry_form.is_valid():
+			message = 'You entered %s and %s' % (entry_form.cleaned_data['title'], entry_form.cleaned_data['descriptions'])
+			new_form = NewEntryForm()
+			return render(request, 'newEntry.html', {'entryform':new_form, 'message':message})
+	else:
+		form = NewEntryForm()
+		return render(request, 'newEntry.html', {'entryform':form})
 
 def viewEntry(request, entry_id):
 	try:
