@@ -5,17 +5,21 @@
 </head>
 {% block content %}
 <body class = "body-html body-size">
+	<h3> {{ message }}</h3>
 	<form enctype="multipart/form-data" action="{% url 'newEntry' %}" method = post>
 		<!-- Django Cross site scripting protection -->
 		{% csrf_token %}
 		<div class ="jumbotron">
-			<div class = "container text-center form-words" style="height: 40px"> Add A New Travel Entry Here </div>
+			{{entryform}}
+<!-- 			<div class = "container text-center form-words" style="height: 40px"> Add A New Travel Entry Here </div>
 			<div class="form-group text-center form-fields">
 				<label class = "text-center form-words"> Title </label>
-				<input type = "title" name = "title">
+				<input type = "title" name = "title"> -->
 			</div>
 
-
+			<div class = "form-group text-center">
+				<button type = "submit" class = "btn btn-primary btn-primary-block"> Enter Entry </button>
+			</div>
 		</div>
 	</form>
 </body>
