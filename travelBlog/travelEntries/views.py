@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import User, Entry, EntryImage
 from django.http import Http404
-from .forms import LoginForm, RegistrationForm, NewEntryForm
+from .forms import LoginForm, RegistrationForm, NewEntryForm, EntryImageForm
 
 # Basic Route for the Site
 def index(request):
@@ -66,13 +66,20 @@ def register(request):
 def newEntry(request):
 	if request.method == 'POST':
 		entry_form = NewEntryForm(request.POST)
-		if entry_form.is_valid():
-			message = 'You entered %s and %s' % (entry_form.cleaned_data['title'], entry_form.cleaned_data['descriptions'])
+		entry_image_form = EntryImageForm(request.POST)
+		#if entry_form.is_valid() and entry_image_form.is_valid():
+		if entry_image_form.is_valid():
+			message = 'You entered %s and %s and %s and %s' % (entry_form.cleaned_data['title'], 
+				entry_form.cleaned_data['descriptions'],
+				entry_image_form.cleaned_data['entry'],
+				entry_image_form.cleaned_data['image'])
 			new_form = NewEntryForm()
-			return render(request, 'newEntry.html', {'entryform':new_form, 'message':message})
+			new_form2 = EntryImageForm()
+			return render(request, 'newEntry.html', {'entryform':new_form, 'message':message, 'imageform':new_form2})
 	else:
 		form = NewEntryForm()
-		return render(request, 'newEntry.html', {'entryform':form})
+		second_form = EntryImageForm()
+		return render(request, 'newEntry.html', {'entryform':form, 'imageform':second_form})
 
 def viewEntry(request, entry_id):
 	try:
@@ -81,6 +88,49 @@ def viewEntry(request, entry_id):
 	except Entry.DoesNotExist:
 		raise Http404(f'Entry with id {entry_id} does not exist')
 	return render(request, 'viewEntry.html', {'entry':entry,'images':images})
+
+def editEntry(request, entry_id):
+	try:
+		entry_image_form = EntryImageForm()
+		entry = Entry.objects.get(id = entry_id)
+		if request.method == 'POST':
+			entry_image_form = EntryImageForm(request.POST)
+			if entry_image_form.is_valid():
+				print('form is valid')
+			else:
+				print('form is not valid')
+	except Entry.DoesNotExist:
+		raise Http404(f'Entry with id {entry_id} does not exist')
+	return render(request, 'editEntry.html', {'entry':entry, 'imageform':entry_image_form})
+
+# def editEntry(request, entry_id):
+# 	try:
+# 		entry = Entry.objects.get(id = entry_id)
+# 		images = EntryImage.objects.all()
+# 		entry_image_form = 'test form'
+		# print('before new form')
+		# entry_image_form = EntryImageForm()
+		# print('new form created')
+		# if request.method == 'POST':
+		# 	entry_image_form = EntryImageForm(request.POST)
+		# 	if entry_image_form.is_valid():
+		# 		print('form is valid')
+		# 	else:
+		# 		print('form is not valid')
+	# except Entry.DoesNotExist:
+	# 	raise Http404(f'Entry with id {entry_id} does not exist')
+	# return render(request, 'editEntry.html', {'entry':entry, 'images':images, 'imageform':entry_image_form})
+
+	# if request.method == 'POST':
+	# 	entry_image_form = EntryImageForm(request.POST)
+	# 	if entry_image_form.is_valid():
+	# 		message = 'You entered %s and image %s' % (entry_image_form.cleaned_data['entry'],
+	# 			entry_image_form.cleaned_data['image'])
+	# 		new_form2 = EntryImageForm()
+	# 		return render(request, 'editEntry.html', {'message':message, 'imageform':new_form2})
+	# 	else:
+	# 		form = EntryImageForm()
+	# 		return render(request, 'editEntry.html', {'imageform':form})
 
 # Credit to https://stackoverflow.com/questions/20177779/how-can-i-change-form-field-values-after-calling-the-is-valid-method/45050312
 # Credit to https://stackoverflow.com/questions/18534307/change-a-form-value-before-validation-in-django-form
