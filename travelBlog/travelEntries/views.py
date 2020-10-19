@@ -2,6 +2,8 @@ from django.shortcuts import render
 from .models import User, Entry, EntryImage
 from django.http import Http404
 from .forms import LoginForm, RegistrationForm, NewEntryForm, EntryImageForm
+from django.forms import modelformset_factory
+from django.forms import formset_factory
 
 # Basic Route for the Site
 def index(request):
@@ -64,22 +66,41 @@ def register(request):
 		return render(request, 'registration.html', {'registrationform':register_form})
 
 def newEntry(request):
+	# ImageFormSet = modelformset_factory(EntryImage,fields = ('image',))
+	ImageFormSet = modelformset_factory(EntryImage, form = EntryImageForm, extra = 4)
 	if request.method == 'POST':
 		entry_form = NewEntryForm(request.POST)
-		entry_image_form = EntryImageForm(request.POST)
+		# entry_image_form = EntryImageForm(request.POST)
+		formset = ImageFormSet(request.POST, request.FILES, queryset = EntryImage.objects.none())
 		#if entry_form.is_valid() and entry_image_form.is_valid():
-		if entry_image_form.is_valid():
-			message = 'You entered %s and %s and %s and %s' % (entry_form.cleaned_data['title'], 
-				entry_form.cleaned_data['descriptions'],
-				entry_image_form.cleaned_data['entry'],
-				entry_image_form.cleaned_data['image'])
+		if entry_form.is_valid() and formset.is_valid():
+			# message = 'You entered %s and %s and %s' % (entry_form.cleaned_data['title'], 
+			# 	entry_form.cleaned_data['descriptions'],
+			# 	entry_form.cleaned_data['author'])
+
+			message = "You Have Successfully Added A New Entry!"
+
+			# saving all the infos
+			author = User.objects.get(username = entry_form.cleaned_data['author'])
+			newEntry = Entry(title = entry_form.cleaned_data['title'], author = author, numOfDescriptions = entry_form.cleaned_data['numOfDescriptions'], descriptions = entry_form.cleaned_data['descriptions'])
+			newEntry.save()
+			# imgformset = formset.save(commit=False)
+			for img in formset.cleaned_data:
+				if img:
+					the_pic = img.get('image')
+					new_img = EntryImage(entry = newEntry, image = the_pic)
+					new_img.save()
+					# print(img.get('image'))
+
 			new_form = NewEntryForm()
-			new_form2 = EntryImageForm()
-			return render(request, 'newEntry.html', {'entryform':new_form, 'message':message, 'imageform':new_form2})
+			ImageFormSet = ImageFormSet(queryset=EntryImage.objects.none())
+			# new_form2 = EntryImageForm()
+			return render(request, 'newEntry.html', {'entryform':new_form, 'message':message, 'imageformset':ImageFormSet})
 	else:
 		form = NewEntryForm()
-		second_form = EntryImageForm()
-		return render(request, 'newEntry.html', {'entryform':form, 'imageform':second_form})
+		ImageFormSet = ImageFormSet(queryset=EntryImage.objects.none())
+		# second_form = EntryImageForm()
+		return render(request, 'newEntry.html', {'entryform':form, 'imageformset':ImageFormSet})
 
 def viewEntry(request, entry_id):
 	try:
@@ -134,3 +155,5 @@ def editEntry(request, entry_id):
 
 # Credit to https://stackoverflow.com/questions/20177779/how-can-i-change-form-field-values-after-calling-the-is-valid-method/45050312
 # Credit to https://stackoverflow.com/questions/18534307/change-a-form-value-before-validation-in-django-form
+# Credit to https://medium.com/@qasimalbaqali/upload-multiple-images-to-a-post-in-django-ff10f66e8f7a
+# Credit to https://stackoverflow.com/questions/34006994/how-to-upload-multiple-images-to-a-blog-post-in-django
