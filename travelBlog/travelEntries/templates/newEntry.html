@@ -12,7 +12,12 @@
 		<div class ="jumbotron">
 			{{entryform}}
 
-			{{imageform}}
+			<!-- {{imageform}} -->
+			{{ imageformset.management_form }}
+    			{% for form in imageformset %}
+    			<br>
+        		{{ form }}
+    		{% endfor %}
 <!-- 			<div class = "container text-center form-words" style="height: 40px"> Add A New Travel Entry Here </div>
 			<div class="form-group text-center form-fields">
 				<label class = "text-center form-words"> Title </label>
