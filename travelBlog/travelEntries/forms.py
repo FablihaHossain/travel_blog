@@ -16,16 +16,17 @@ class RegistrationForm(forms.ModelForm):
 class NewEntryForm(forms.ModelForm):
 	numOfDescriptions = forms.CharField(label='numOfDescriptions', widget=forms.TextInput(attrs={'min':1,'max': '5','type': 'number'}))
 	# Descriptions will be separated based on commas
-	descriptions = SimpleArrayField(forms.CharField(max_length=100))
+	# descriptions = SimpleArrayField(forms.CharField(max_length=100))
 	class Meta:
 		model = Entry
-		fields = ['title', 'author', 'numOfDescriptions', 'descriptions']
+		fields = ['title', 'author', 'numOfDescriptions']
 
 class EntryImageForm(forms.ModelForm):
 	class Meta:
 		model = EntryImage
-		fields = ['image']
+		fields = ['image', 'description']
 	image = forms.ImageField(label='image')
+	description = forms.CharField(max_length = 500)
 		# widgets = {'image':forms.ImageField}
 # extra notes
 # example = ChoiceField(label="Example", choices = [('1'), ('2')....])
