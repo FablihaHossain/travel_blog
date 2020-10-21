@@ -25,7 +25,8 @@ urlpatterns = [
     path('register/', views.register, name = 'register'),
     path('newEntry/', views.newEntry, name = 'newEntry'),
     path('viewEntry/<int:entry_id>/', views.viewEntry, name = 'viewEntry'),
-    path('editEntry/<int:entry_id>/', views.editEntry, name = 'editEntry')
+    path('editEntry/<int:entry_id>/', views.editEntry, name = 'editEntry'),
+    path('homepage/', views.homepage, name = 'homepage')
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
