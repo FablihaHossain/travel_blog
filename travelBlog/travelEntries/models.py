@@ -22,7 +22,7 @@ class Entry(models.Model):
 	# Each entry belongs to one user in the database
 	author = models.ForeignKey('User', on_delete=models.CASCADE)
 	numOfDescriptions = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
-	descriptions = ArrayField(models.CharField(max_length = 500), size = 5)
+	# descriptions = ArrayField(models.CharField(max_length = 500), size = 5)
 
 	# Print statement for Python Shell and Admin Functionality
 	def __str__(self):
@@ -32,6 +32,9 @@ class Entry(models.Model):
 class EntryImage(models.Model):
 	# Each image uploaded must pertain to a particular entry in the database
 	entry = models.ForeignKey('Entry', on_delete=models.CASCADE)
+
+	# Each image should have a corresponding description
+	description = models.CharField(max_length = 500, default = "No Description Given")
 
 	# Defines pathname for uploaded images, each entry will have their own directory
 	def get_upload_path(instance, filename):
