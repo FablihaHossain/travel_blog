@@ -6,14 +6,23 @@
 {% block content %}
 <body class = "body-html body-size">
 	<p> Entry Details with photos </p>
-	{% for entry in entries %}
+		{% for entry in entries %}
 		<br>
-		<b>{{entry.author}}</b>
-		<u>{{entry.title}} </u>
-	{% endfor %}
+		<b> {{entry.title}}</b>
+		<u> {{entry.author}}</u>
+		<br>
+		<p> Images and Descriptions </p>
+		{% for image in images %}
+			{% if image.entry.id == entry.id %}
+				<br>
+				<img src="{{image.image.url}}" height="300" width="300">
+				{{image.description}}
+				<br><br>
+			{% endif %}
+		{% endfor %}
+		<br>
+		{% endfor %}
 
 </body>
 {% endblock content %}
 </html>
-
-
