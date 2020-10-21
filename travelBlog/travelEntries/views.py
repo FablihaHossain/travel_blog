@@ -124,6 +124,87 @@ def editEntry(request, entry_id):
 		raise Http404(f'Entry with id {entry_id} does not exist')
 	return render(request, 'editEntry.html', {'entry':entry, 'imageform':entry_image_form})
 
+# The homepage will contain all entries
+def homepage(request):
+	# Getting all entries
+	entries = Entry.objects.all()
+
+	# Getting all entry images
+	images = EntryImage.objects.all()
+
+	return render(request, 'homepage.html', {'entries':entries, 'images':images})
+
+
+
+	# # Sorting Data For Each Entry with Images
+	# imgPerEntry = []
+	# descPerEntry = []
+	# entryInfo = []
+
+
+	# for entry in entries:
+	# 	entryImages = []
+	# 	# Sorting Images
+	# 	for img in images:
+	# 		if img.entry_id == entry.id:
+	# 			entryImages.append(img)
+	# 	imgPerEntry.append(entryImages)
+	# 	# print(entryImages)
+	# 	# print("")
+
+	# 	desc = []
+	# 	for x in range(0, entry.numOfDescriptions):
+	# 		desc.append(entry.descriptions[x])
+	# 		# print(entry.descriptions[x])
+	# 		# print(entryImages[x])
+	# 		# print("")
+	# 	descPerEntry.append(desc)
+			
+
+	# 		# descAndImg = [entry.descriptions[x], entryImages[x].image]
+	# 		# print(descAndImg)
+	# 		# print("")
+
+
+	# descImgPairs = []
+	# descAndImgSet = zip(descPerEntry, imgPerEntry)
+	# for (dSet, iSet) in descAndImgSet:
+	# 	for (d, i) in zip(dSet, iSet):
+	# 		pair = [d, i]
+	# 		descImgPairs.append(pair)
+	# 		# print(d)
+	# 		# print(i.image)
+	# 		# print("")
+
+	# for pair in descImgPairs:
+	# 	print(pair)
+
+	# return render(request, 'homepage.html', {'entries':entries, 'descAndImg':descAndImgSet})
+
+		# entryImages = []
+		# entryDesc = []
+
+		# # Sorting Images
+		# for img in images:
+		# 	if img.entry_id == entry.id:
+		# 		entryImages.append(img)
+		# imgPerEntry.append(entryImages)
+
+		# # Sorting Descriptions
+		# for desc in entry.descriptions:
+		# 	entryDesc.append(desc)
+		# descPerEntry.append(entryDesc)
+
+	# descImgCombo = []
+	# for (dSet, iSet) in zip(descPerEntry, imgPerEntry):
+	# 	for (desc, img) in zip(dSet, iSet):
+	# 		descAndImg = [desc, img]
+	# 		descImgCombo.append(descAndImg)
+
+	# entryData 
+	# for entry
+	
+
 # def editEntry(request, entry_id):
 # 	try:
 # 		entry = Entry.objects.get(id = entry_id)
