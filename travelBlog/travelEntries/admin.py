@@ -9,12 +9,12 @@ class UserAdmin(admin.ModelAdmin):
 
 # Details for Entry Images
 class ArrayModelAdmin(admin.ModelAdmin, DynamicArrayMixin):
-    list_display = ['title', 'author', 'descriptions']
+    list_display = ['title', 'author',]
 admin.site.register(Entry, ArrayModelAdmin)
 
 # Entry Details
 @admin.register(EntryImage)
 class EntryImages(admin.ModelAdmin):
-	list_display = ['entry', 'image']
+	list_display = ['entry', 'image', 'description']
 
 # Credit to https://github.com/gradam/django-better-admin-arrayfield
