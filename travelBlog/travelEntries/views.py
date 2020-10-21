@@ -112,13 +112,18 @@ def newEntry(request):
 			author = User.objects.get(username = entry_form.cleaned_data['author'])
 			newEntry = Entry(title = entry_form.cleaned_data['title'], author = author, numOfDescriptions = entry_form.cleaned_data['numOfDescriptions'])
 			# , descriptions = entry_form.cleaned_data['descriptions']
-			newEntry.save()
+			# newEntry.save()
 			# imgformset = formset.save(commit=False)
 			for img in formset.cleaned_data:
 				if img:
 					the_pic = img.get('image')
-					new_img = EntryImage(entry = newEntry, image = the_pic)
-					new_img.save()
+					the_desc = img.get('description')
+
+					print(the_pic)
+					print(the_desc)
+					print("")
+					# new_img = EntryImage(entry = newEntry, image = the_pic)
+					# new_img.save()
 					# print(img.get('image'))
 
 			new_form = NewEntryForm()
