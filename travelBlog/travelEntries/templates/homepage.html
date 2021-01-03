@@ -5,24 +5,20 @@
 </head>
 {% block content %}
 <body class = "body-html body-size">
-	<p> Entry Details with photos </p>
-		{% for entry in entries %}
-		<br>
-		<b> {{entry.title}}</b>
-		<u> {{entry.author}}</u>
-		<br>
-		<p> Images and Descriptions </p>
-		{% for image in images %}
-			{% if image.entry.id == entry.id %}
-				<br>
-				<img src="{{image.image.url}}" height="300" width="300">
-				{{image.description}}
-				<br><br>
-			{% endif %}
-		{% endfor %}
-		<br>
-		{% endfor %}
-
+	<div class = "container">
+		<h3 class = "text-center"> View Any Entry You Like </h3>
+	<div class = "card-deck">
+	{% for entry, user in data %}
+	<div class="card" style="width: 15rem;">
+		<div class="card-body">
+			<h5 class="card-title">{{entry.title}}</h5>
+			<h6 class="card-subtitle mb-2 text-muted"> By: {{user}}</h6>
+			<a href="{% url 'viewEntry' entry_id=entry.id %}" class="btn btn-primary btn-primary-block">View Entry</a>
+		</div>
+	</div>
+	{% endfor %} 
+	</div>
+</div>
 </body>
 {% endblock content %}
 </html>
