@@ -11,28 +11,16 @@
 		{% csrf_token %}
 		<div class = "jumbotron">
 			<div class="container text-center form-words" style="height: 40px"> Please Provide The Following Information </div>
-			{{registrationform}}
-			<!-- <input type="hidden" name="role" value="General User" /> -->
-<!-- 			<div class="form-group text-center form-fields">
-				<label class = "text-center form-words"> Name </label>
-				<input type="name" name="name">
-			</div>
-
-			<div class="form-group text-center form-fields">
-				<label class = "text-center form-words"> Email </label>
-				<input type="email" name="email">
-			</div>
-
-			<div class="form-group text-center form-fields">
-				<label class = "text-center form-words"> Username </label>
-				<input type="username" name="username">
-			</div>
-
-			<div class="form-group text-center form-fields">
-				<label class = "text-center form-words"> Password </label>
-				<input type="password" name="password">
-			</div> -->
-
+				{% for field in registrationform %}
+				<div class = "form-group text-center form-fields">
+					{{ field.errors }}
+						{% if not field.label == 'Role' %}
+						<label class = "text-center form-words"> {{field.label_tag}}</label>
+						{% endif %}
+					{{field}}
+				</div>
+				{% endfor %}
+				<input type="hidden" name="role" value="General User" />
 			<div class = "form-group text-center">
 				<button type = "submit" class = "btn btn-primary btn-primary-block"> Register </button>
 			</div>
