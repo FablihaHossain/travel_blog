@@ -57,7 +57,7 @@ def register(request):
 			#print(new_user.role)
 			#new_user.save()
 			# saving new user
-			register_form.save()
+			# register_form.save()
 			# creating new form 
 			new_Form = RegistrationForm()
 			return render(request, 'registration.html', {'registrationform':new_Form, 'message':message})
@@ -73,16 +73,30 @@ def homepage(request):
 	# Getting all entry images
 	images = EntryImage.objects.all()
 
-	return render(request, 'homepage.html', {'entries':entries, 'images':images})
+	# Getting all authors
+	authors = User.objects.all()
+
+	listOfAuthorNames = []
+	for entry in entries:
+		for auth in authors:
+			if entry.author == auth:
+				listOfAuthorNames.append(auth.name)
+
+	return render(request, 'homepage.html', {'entries':entries, 'images':images, 'data': zip(entries, listOfAuthorNames)})
 
 # Viewing Entries Individually Based on Entry ID
 def viewEntry(request, entry_id):
 	try:
 		entry = Entry.objects.get(id = entry_id)
 		images = EntryImage.objects.all()
+
+		currentImages = []
+		for img in images:
+			if img.entry_id == entry.id:
+				currentImages.append(img)
 	except Entry.DoesNotExist:
 		raise Http404(f'Entry with id {entry_id} does not exist')
-	return render(request, 'viewEntry.html', {'entry':entry,'images':images})
+	return render(request, 'viewEntry.html', {'entry':entry,'images':currentImages})
 
 
 
@@ -95,7 +109,7 @@ def viewEntry(request, entry_id):
 # NEEDS FIXING WITH THE NEW CHANGE
 def newEntry(request):
 	# ImageFormSet = modelformset_factory(EntryImage,fields = ('image',))
-	ImageFormSet = modelformset_factory(EntryImage, form = EntryImageForm, extra = 4)
+	ImageFormSet = modelformset_factory(EntryImage, form = EntryImageForm, extra = 5)
 	if request.method == 'POST':
 		entry_form = NewEntryForm(request.POST)
 		# entry_image_form = EntryImageForm(request.POST)
@@ -107,17 +121,21 @@ def newEntry(request):
 			# 	entry_form.cleaned_data['author'])
 
 			message = "You Have Successfully Added A New Entry!"
+			print(len(formset.cleaned_data))
 
 			# saving all the infos
+			numOfDescriptions = entry_form.cleaned_data['numOfDescriptions']
 			author = User.objects.get(username = entry_form.cleaned_data['author'])
 			newEntry = Entry(title = entry_form.cleaned_data['title'], author = author, numOfDescriptions = entry_form.cleaned_data['numOfDescriptions'])
 			# , descriptions = entry_form.cleaned_data['descriptions']
 			# newEntry.save()
 			# imgformset = formset.save(commit=False)
+			img_count = 0
 			for img in formset.cleaned_data:
 				if img:
 					the_pic = img.get('image')
 					the_desc = img.get('description')
+					img_count = img_count + 1
 
 					print(the_pic)
 					print(the_desc)
@@ -126,6 +144,8 @@ def newEntry(request):
 					# new_img.save()
 					# print(img.get('image'))
 
+			if img_count != numOfDescriptions:
+				message = "Error! Number of descriptions do not match the amount of images uploaded"
 			new_form = NewEntryForm()
 			ImageFormSet = ImageFormSet(queryset=EntryImage.objects.none())
 			# new_form2 = EntryImageForm()
