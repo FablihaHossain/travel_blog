@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import User, Entry, EntryImage
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from .forms import LoginForm, RegistrationForm, NewEntryForm, EntryImageForm
 from django.forms import modelformset_factory
 from django.forms import formset_factory
@@ -22,13 +22,35 @@ def index(request):
 def login(request):
 	if request.method == 'POST':
 		login_form = LoginForm(request.POST)
+		loggedInUser = None
 		if login_form.is_valid():
-			message = 'You entered %s and %s' % (login_form.cleaned_data['username'], login_form.cleaned_data['password'])
-			new_form = LoginForm()
-			return render(request, 'login.html', {'loginform':new_form, 'message':message})
-	else:
+			try:
+				loggedInUser = User.objects.get(username = request.POST['username'])
+				if loggedInUser.password == request.POST['password']:
+					request.session['user_id'] = loggedInUser.id
+					request.session['username'] = loggedInUser.username
+					return redirect('/homepage')
+				else:
+					message = 'Error! Invalid Log In... Please Try Again'
+					new_form = LoginForm()
+					return render(request, 'login.html', {'loginform':new_form, 'message':message})
+			except User.DoesNotExist:
+				raise Http404('Error! Username Does Not Exist')
+				# message = 'Error! Username Does Not Exist'
+				# new_form = LoginForm()
+				# return render(request, 'login.html', {'loginform':new_form, 'message':message})
+	else: 	
 		form = LoginForm()
 		return render(request, 'login.html', {'loginform':form})
+
+def logout(request):
+	try:
+		del request.session['user_id']
+		del request.session['username']
+		return render(request, 'logout.html')
+	except KeyError:
+		pass
+	return render(request, 'logout.html')
 
 # Registration Page
 def register(request):
@@ -45,28 +67,31 @@ def register(request):
 		# checking if registration form is valid
 		if register_form.is_valid():
 			#register_form.cleaned_data['role'] = 'General User'
-			message = 'You Entered name: %s, email: %s, username: %s, password: %s, role:%s' % (register_form.cleaned_data['name'],
-				register_form.cleaned_data['email'],
-				register_form.cleaned_data['username'],
-				register_form.cleaned_data['password'],
-				register_form.cleaned_data['role'])
+			# message = 'You Entered name: %s, email: %s, username: %s, password: %s, role:%s' % (register_form.cleaned_data['name'],
+			# 	register_form.cleaned_data['email'],
+			# 	register_form.cleaned_data['username'],
+			# 	register_form.cleaned_data['password'],
+			# 	register_form.cleaned_data['role'])
 
-			#new_user = register_form.save(commit=False)
-			#print(new_user.role)
-			#new_user.role = 'G'
-			#print(new_user.role)
-			#new_user.save()
+			new_user = register_form.save(commit=False)
+			# print(new_user.role)
+			new_user.role = 'G'
+			# print(new_user.role)
+			new_user.save()
 			# saving new user
-			# register_form.save()
+			register_form.save()
 			# creating new form 
-			new_Form = RegistrationForm()
-			return render(request, 'registration.html', {'registrationform':new_Form, 'message':message})
+			# new_Form = RegistrationForm()
+			# return render(request, 'registration.html', {'registrationform':new_Form, 'message':message})
+			return redirect('/login')
 	else:
 		register_form = RegistrationForm()
 		return render(request, 'registration.html', {'registrationform':register_form})
 
 # The homepage will contain all entries
 def homepage(request):
+	if not request.session.get('username'):
+		return redirect('/login')
 	# Getting all entries
 	entries = Entry.objects.all()
 
@@ -86,6 +111,8 @@ def homepage(request):
 
 # Viewing Entries Individually Based on Entry ID
 def viewEntry(request, entry_id):
+	if not request.session.get('username'):
+		return redirect('/login')
 	try:
 		entry = Entry.objects.get(id = entry_id)
 		images = EntryImage.objects.all()
@@ -108,6 +135,8 @@ def viewEntry(request, entry_id):
 
 # NEEDS FIXING WITH THE NEW CHANGE
 def newEntry(request):
+	if not request.session.get('username'):
+		return redirect('/login')
 	# ImageFormSet = modelformset_factory(EntryImage,fields = ('image',))
 	ImageFormSet = modelformset_factory(EntryImage, form = EntryImageForm, extra = 5)
 	if request.method == 'POST':
@@ -206,3 +235,4 @@ def editEntry(request, entry_id):
 # Credit to https://stackoverflow.com/questions/18534307/change-a-form-value-before-validation-in-django-form
 # Credit to https://medium.com/@qasimalbaqali/upload-multiple-images-to-a-post-in-django-ff10f66e8f7a
 # Credit to https://stackoverflow.com/questions/34006994/how-to-upload-multiple-images-to-a-blog-post-in-django
+# Credit to https://docs.djangoproject.com/en/3.1/topics/http/sessions/

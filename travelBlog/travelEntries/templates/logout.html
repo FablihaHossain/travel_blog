@@ -1,0 +1,14 @@
+{% extends "index.html" %}
+<html>
+<head>
+	{% block title %} <title> Logout Page </title>{% endblock title %}
+</head>
+{% block content %}
+<body class = "body-html body size">
+	<div class = "text-center">
+		<p> You have successfully logged out </p>
+		<a href="{% url 'login' %}" class="btn btn-primary btn-primary-block">Login Again!</a>
+	</div>
+</body>
+{% endblock content %}
+</html>
