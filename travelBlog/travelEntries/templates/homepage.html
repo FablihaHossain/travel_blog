@@ -6,15 +6,20 @@
 {% block content %}
 <body class = "body-html body-size">
 	<div class = "container">
+		<br>
 		<h3 class = "text-center"> View Any Entry You Like </h3>
+		<br>
 	<div class = "card-deck">
-	{% for entry, user in data %}
-	<div class="card" style="width: 15rem;">
-		<div class="card-body">
-			<h5 class="card-title">{{entry.title}}</h5>
-			<h6 class="card-subtitle mb-2 text-muted"> By: {{user}}</h6>
-			<a href="{% url 'viewEntry' entry_id=entry.id %}" class="btn btn-primary btn-primary-block">View Entry</a>
-		</div>
+	{% for entry, user, img in data %}
+	<div class="card entry-card">
+		<a href="{% url 'viewEntry' entry_id=entry.id %}" style = "text-decoration: none; color: black">
+			<img src="{{img.image.url}}" class="card-img-top" alt="..." style = "height:300px;">
+			<div class="card-body">
+			    <h5 class="card-title">{{entry.title}}</h5>
+			<!--     <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p> -->
+			    <p class="card-text"><small class="text-muted">By: {{user}}</small></p>
+	  		</div>
+		</a>
 	</div>
 	{% endfor %} 
 	</div>
