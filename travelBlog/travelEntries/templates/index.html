@@ -47,11 +47,35 @@
 </head>
 {% block content %}
 <body class = "body-html body-size">
-	<h3> Welcome! </h3>
-</body>
+	<div class = "text-center">
+		<img src="/static/Images/TravelBlogLogo-trans.png" style = "height:150; width: 150">
 
-<div class = "footer text-center">
-	<p>Created by Fabliha Hossain</p>
-</div>
+		{% if not request.session.username %}
+			<h3> Welcome Fellow Travel Lover! </h3>
+			<br>
+				<div class = "text-center">
+					Please log in and share your recent journey <a href="{% url 'login' %}" class="btn btn-primary btn-primary-block">Login</a>
+				</div>
+				<br>
+				<div class = "text-center">
+					Don't Have An Account? Register Here! <a href="{% url 'register' %}" class="btn btn-primary btn-primary-block">Register</a>
+				</div>
+		{% endif %}
+
+		{% if request.session.username %}
+			<h3> Welcome {{request.session.username}}! </h3>
+
+			 NOTE TO SELF: MAYBE MAKE DASHBOARD HERE TO VIEW ALL, VIEW CURRENT, AND MAKE NEW ENTRIES. As well as log out and profile info
+			<div class = "text-center">
+				View All Entries Here <a href="{% url 'homepage' %}" class="btn btn-primary btn-primary-block">All Entries</a>
+			</div>
+		{% endif %}
+	</div>
+</body>
 {% endblock content %}
+	<div class = "footer text-center">
+		<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>.
+		</div>
+	</div>
+
 </html>
