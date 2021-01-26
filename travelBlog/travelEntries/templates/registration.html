@@ -22,7 +22,12 @@
 				{% endfor %}
 				<input type="hidden" name="role" value="General User" />
 			<div class = "form-group text-center">
+				<h4 class = 'text-center'> Register and join our community!</h4>
 				<button type = "submit" class = "btn btn-primary btn-primary-block"> Register </button>
+			</div>
+
+			<div class = "text-center">
+				Already have an account? <a href="{% url 'login' %}" >Login Here</a>
 			</div>
 		</div>
 	</form>
