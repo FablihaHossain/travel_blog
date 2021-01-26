@@ -93,7 +93,7 @@ def homepage(request):
 	if not request.session.get('username'):
 		return redirect('/login')
 	# Getting all entries
-	entries = Entry.objects.all()
+	entries = Entry.objects.order_by('-id')
 
 	# Getting all entry images
 	images = EntryImage.objects.all()
@@ -107,7 +107,14 @@ def homepage(request):
 			if entry.author == auth:
 				listOfAuthorNames.append(auth.name)
 
-	return render(request, 'homepage.html', {'entries':entries, 'images':images, 'data': zip(entries, listOfAuthorNames)})
+	listOfCoverImages = []
+	for entry in entries:
+		for img in images:
+			if img.entry_id == entry.id:
+				listOfCoverImages.append(img)
+				break
+
+	return render(request, 'homepage.html', {'entries':entries, 'data': zip(entries, listOfAuthorNames, listOfCoverImages)})
 
 # Viewing Entries Individually Based on Entry ID
 def viewEntry(request, entry_id):
