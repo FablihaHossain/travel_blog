@@ -15,8 +15,10 @@
 					{% for field in entryform %}
 					<row class = "form-group form-fields">
 						{{field.errors}}
-						<label class = "text-center form-words">{{field.label_tag}}</label>
-						{{field}}
+						{% if not field.label == 'Author' %}
+							<label class = "text-center form-words"> {{field.label_tag}}</label>
+							{{field}}
+						{% endif %}
 					</row>
 					{% endfor %}
 				</div> 
