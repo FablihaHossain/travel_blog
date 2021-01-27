@@ -16,7 +16,14 @@ def index(request):
 	# Getting all entry images
 	images = EntryImage.objects.all()
 
-	return render(request, 'index.html', {'users':users, 'entries':entries, 'images':images})
+	# Getting current name if logged in
+	userId = request.session.get('user_id')
+	if userId:
+		theUser = User.objects.get(id = userId)
+	else:
+		theUser = None
+
+	return render(request, 'index.html', {'users':users, 'entries':entries, 'images':images, 'theUser': theUser})
 
 # Login Page
 def login(request):
@@ -36,9 +43,6 @@ def login(request):
 					return render(request, 'login.html', {'loginform':new_form, 'message':message})
 			except User.DoesNotExist:
 				raise Http404('Error! Username Does Not Exist')
-				# message = 'Error! Username Does Not Exist'
-				# new_form = LoginForm()
-				# return render(request, 'login.html', {'loginform':new_form, 'message':message})
 	else: 	
 		form = LoginForm()
 		return render(request, 'login.html', {'loginform':form})
@@ -61,17 +65,9 @@ def register(request):
 		updated_request.update({'role': 'G'})
 		# putting all updated information into the role
 		register_form = RegistrationForm(updated_request)
-		#register_form = RegistrationForm(request.POST)
 
-		#role = request.POST['role']
 		# checking if registration form is valid
 		if register_form.is_valid():
-			#register_form.cleaned_data['role'] = 'General User'
-			# message = 'You Entered name: %s, email: %s, username: %s, password: %s, role:%s' % (register_form.cleaned_data['name'],
-			# 	register_form.cleaned_data['email'],
-			# 	register_form.cleaned_data['username'],
-			# 	register_form.cleaned_data['password'],
-			# 	register_form.cleaned_data['role'])
 
 			new_user = register_form.save(commit=False)
 			# print(new_user.role)
@@ -80,9 +76,7 @@ def register(request):
 			new_user.save()
 			# saving new user
 			register_form.save()
-			# creating new form 
-			# new_Form = RegistrationForm()
-			# return render(request, 'registration.html', {'registrationform':new_Form, 'message':message})
+			# Redirecting to login page
 			return redirect('/login')
 	else:
 		register_form = RegistrationForm()
@@ -133,14 +127,6 @@ def viewEntry(request, entry_id):
 	return render(request, 'viewEntry.html', {'entry':entry,'images':currentImages})
 
 
-
-
-
-
-
-
-
-# NEEDS FIXING WITH THE NEW CHANGE
 def newEntry(request):
 	if not request.session.get('username'):
 		return redirect('/login')
@@ -148,48 +134,44 @@ def newEntry(request):
 	ImageFormSet = modelformset_factory(EntryImage, form = EntryImageForm, extra = 5)
 	if request.method == 'POST':
 		entry_form = NewEntryForm(request.POST)
-		# entry_image_form = EntryImageForm(request.POST)
 		formset = ImageFormSet(request.POST, request.FILES, queryset = EntryImage.objects.none())
-		#if entry_form.is_valid() and entry_image_form.is_valid():
 		if entry_form.is_valid() and formset.is_valid():
-			# message = 'You entered %s and %s and %s' % (entry_form.cleaned_data['title'], 
-			# 	entry_form.cleaned_data['descriptions'],
-			# 	entry_form.cleaned_data['author'])
-
-			message = "You Have Successfully Added A New Entry!"
-			print(len(formset.cleaned_data))
-
-			# saving all the infos
+			# Getting all the information from form and current user logged in
 			numOfDescriptions = entry_form.cleaned_data['numOfDescriptions']
-			author = User.objects.get(username = entry_form.cleaned_data['author'])
+			username = request.session.get('username')
+			author = User.objects.get(username = username)
+
+			# Creating a new entry with given info
 			newEntry = Entry(title = entry_form.cleaned_data['title'], author = author, numOfDescriptions = entry_form.cleaned_data['numOfDescriptions'])
-			# , descriptions = entry_form.cleaned_data['descriptions']
-			# newEntry.save()
-			# imgformset = formset.save(commit=False)
-			img_count = 0
-			for img in formset.cleaned_data:
-				if img:
-					the_pic = img.get('image')
-					the_desc = img.get('description')
-					img_count = img_count + 1
+			if entry_form.is_valid() and formset.is_valid():
+				img_count = 0
+				img_entries_list = []
+				for img in formset.cleaned_data:
+					if img:
+						the_pic = img.get('image')
+						the_desc = img.get('description')
+						img_count = img_count + 1
 
-					print(the_pic)
-					print(the_desc)
-					print("")
-					# new_img = EntryImage(entry = newEntry, image = the_pic)
-					# new_img.save()
-					# print(img.get('image'))
+						# Creating a new entry image object and appending it to list
+						new_entry_img = EntryImage(entry = newEntry, image = the_pic, description = the_desc)
+						img_entries_list.append(new_entry_img)
 
-			if img_count != numOfDescriptions:
-				message = "Error! Number of descriptions do not match the amount of images uploaded"
-			new_form = NewEntryForm()
-			ImageFormSet = ImageFormSet(queryset=EntryImage.objects.none())
-			# new_form2 = EntryImageForm()
-			return render(request, 'newEntry.html', {'entryform':new_form, 'message':message, 'imageformset':ImageFormSet})
+				# Double checking form validity
+				if img_count != int(numOfDescriptions):
+					message = "Error! Number of descriptions do not match the amount of images uploaded"
+					new_form = NewEntryForm()
+					ImageFormSet = ImageFormSet(queryset=EntryImage.objects.none())
+					return render(request, 'newEntry.html', {'entryform':new_form, 'message':message, 'imageformset':ImageFormSet})
+				else:
+					message = "You Have Successfully Added A New Entry!"
+					# Saving New Entry and All New Entry Images 
+					newEntry.save()
+					for img_entry in img_entries_list:
+						img_entry.save()
+					return redirect('homepage') # redirecting to homepage to show new entry
 	else:
 		form = NewEntryForm()
 		ImageFormSet = ImageFormSet(queryset=EntryImage.objects.none())
-		# second_form = EntryImageForm()
 		return render(request, 'newEntry.html', {'entryform':form, 'imageformset':ImageFormSet})
 
 
