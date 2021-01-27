@@ -113,3 +113,12 @@
  	bottom: 0;
 	width: 100%;
 }
+
+.list-group {
+	display: inline-grid;
+}
+
+.list-group-item{
+	width: 250px;
+	background-color: #e6e6ff
+}
