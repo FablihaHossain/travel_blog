@@ -63,12 +63,19 @@
 		{% endif %}
 
 		{% if request.session.username %}
-			<h3> Welcome {{request.session.username}}! </h3>
-
-			 NOTE TO SELF: MAYBE MAKE DASHBOARD HERE TO VIEW ALL, VIEW CURRENT, AND MAKE NEW ENTRIES. As well as log out and profile info
-			<div class = "text-center">
-				View All Entries Here <a href="{% url 'homepage' %}" class="btn btn-primary btn-primary-block">All Entries</a>
-			</div>
+			<h3> Welcome {{theUser.name}}! </h3>
+			<ul class = "list-group">
+				<li class = "list-group-item disabled"> Dashboard</li>
+				<li class = "list-group-item"> 
+					<a href="{% url 'homepage' %}">View All Entries</a>
+				</li>
+				<li class = "list-group-item">
+					<a href="{% url 'newEntry' %}">Create New Entry</a>
+				</li>
+				<li class = "list-group-item">
+					<a href="{% url 'logout' %}">Log Out of Account</a>
+				</li>
+			</ul>
 		{% endif %}
 	</div>
 </body>
