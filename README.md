@@ -6,3 +6,7 @@ A Django Project Implemented with a PostgreSQL Backend
 ![Entry Cards Demo](travelBlog/static/Images/entryCards.gif)
 
 ![Entry Example Demo](travelBlog/static/Images/entryExample.gif)
+
+![Register Page](travelBlog/static/Images/RegisterPage.png)
+
+![New Entry Page](travelBlog/static/Images/AddEntryPage.png)
