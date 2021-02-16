@@ -1,4 +1,4 @@
-# TravelBlog
+# TravelBlog ![TravelBlogLogo](travelBlog/static/Files/Logo/TravelBlogLogo.png)
 ## Developed by Fabliha Hossain
 ### A Django Project Implemented with a PostgreSQL Backend
 
