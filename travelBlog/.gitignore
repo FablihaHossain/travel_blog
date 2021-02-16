@@ -4,6 +4,10 @@ __pycache__/
 travelBlog/__pycache__/
 travelEntries/__pycache__/
 travelEntries/migrations/__pycache__/
+.DS_Store
+static/.DS_Store
+../.DS_Store
+static/Images/.DS_Store
 
 # Config File with DB Credentials
 config.py
