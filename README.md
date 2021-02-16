@@ -1,4 +1,5 @@
-# <img src = "travelBlog/static/Files/Logo/TravelBlogLogo.png" width = "150" height = "150"></img> A Django Project Implemented with a PostgreSQL Backend
+# <img src = "travelBlog/static/Files/Logo/TravelBlogLogo.png" width = "150" height = "150"></img> 
+A Django Project Implemented with a PostgreSQL Backend
 ### Developed by Fabliha Hossain
 
 
