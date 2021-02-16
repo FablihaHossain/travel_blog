@@ -11,6 +11,7 @@
 		{% csrf_token %}
 		<div class = "jumbotron">
 			<div class="container text-center form-words" style="height: 40px"> Please Provide The Following Information </div>
+				<!-- Fields for the register page -->
 				{% for field in registrationform %}
 				<div class = "form-group text-center form-fields">
 					{{ field.errors }}
@@ -20,15 +21,19 @@
 					{{field}}
 				</div>
 				{% endfor %}
+				<!-- Role value is hidden and default to ensure no one makes themselves an admin -->
 				<input type="hidden" name="role" value="General User" />
-			<div class = "form-group text-center">
-				<h4 class = 'text-center'> Register and join our community!</h4>
-				<button type = "submit" class = "btn btn-primary btn-primary-block"> Register </button>
-			</div>
 
-			<div class = "text-center">
-				Already have an account? <a href="{% url 'login' %}" >Login Here</a>
-			</div>
+				<!-- Register Button -->
+				<div class = "form-group text-center">
+					<h4 class = 'text-center'> Register and join our community!</h4>
+					<button type = "submit" class = "btn btn-primary btn-primary-block"> Register </button>
+				</div>
+
+				<!-- Route to login page -->
+				<div class = "text-center">
+					Already have an account? <a href="{% url 'login' %}" >Login Here</a>
+				</div>
 		</div>
 	</form>
 </body>

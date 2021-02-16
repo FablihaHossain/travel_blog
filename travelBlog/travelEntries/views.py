@@ -32,23 +32,29 @@ def login(request):
 		loggedInUser = None
 		if login_form.is_valid():
 			try:
+				# Validating user credentials
 				loggedInUser = User.objects.get(username = request.POST['username'])
 				if loggedInUser.password == request.POST['password']:
+					# Updating the session details for the logged in user
 					request.session['user_id'] = loggedInUser.id
 					request.session['username'] = loggedInUser.username
-					return redirect('/homepage')
+					return redirect('/')
 				else:
+				# Error message and new login form if incorrect login
 					message = 'Error! Invalid Log In... Please Try Again'
 					new_form = LoginForm()
 					return render(request, 'login.html', {'loginform':new_form, 'message':message})
 			except User.DoesNotExist:
+				# Exception raised if the user doesn't exist in the database
 				raise Http404('Error! Username Does Not Exist')
 	else: 	
+		# Original Login Form
 		form = LoginForm()
 		return render(request, 'login.html', {'loginform':form})
 
 def logout(request):
 	try:
+		# Clearing the session after user logs out
 		del request.session['user_id']
 		del request.session['username']
 		return render(request, 'logout.html')
@@ -68,13 +74,12 @@ def register(request):
 
 		# checking if registration form is valid
 		if register_form.is_valid():
-
+			# Creating new user and assign it the general user role
 			new_user = register_form.save(commit=False)
-			# print(new_user.role)
 			new_user.role = 'G'
-			# print(new_user.role)
 			new_user.save()
-			# saving new user
+
+			# Saving the New User
 			register_form.save()
 			# Redirecting to login page
 			return redirect('/login')
@@ -84,8 +89,10 @@ def register(request):
 
 # The homepage will contain all entries
 def homepage(request):
+	# Redirect to login page if user not logged in
 	if not request.session.get('username'):
 		return redirect('/login')
+
 	# Getting all entries
 	entries = Entry.objects.order_by('-id')
 
@@ -95,54 +102,67 @@ def homepage(request):
 	# Getting all authors
 	authors = User.objects.all()
 
+	# Getting the list of users that submitted entries
 	listOfAuthorNames = []
 	for entry in entries:
 		for auth in authors:
 			if entry.author == auth:
 				listOfAuthorNames.append(auth.name)
 
+	# Getting list of initial images to act as cover images for the entry card
 	listOfCoverImages = []
 	for entry in entries:
 		for img in images:
 			if img.entry_id == entry.id:
 				listOfCoverImages.append(img)
 				break
-
 	return render(request, 'homepage.html', {'entries':entries, 'data': zip(entries, listOfAuthorNames, listOfCoverImages)})
 
 # Viewing Entries Individually Based on Entry ID
 def viewEntry(request, entry_id):
+	# Redirect to login page if user not logged in
 	if not request.session.get('username'):
 		return redirect('/login')
+
 	try:
+		# Getting the details of current entry based on given id
 		entry = Entry.objects.get(id = entry_id)
 		images = EntryImage.objects.all()
 
+		# Getting the corresponding images of the entry
 		currentImages = []
 		for img in images:
 			if img.entry_id == entry.id:
 				currentImages.append(img)
 	except Entry.DoesNotExist:
+		# Error handling if the entry does not exist
 		raise Http404(f'Entry with id {entry_id} does not exist')
 	return render(request, 'viewEntry.html', {'entry':entry,'images':currentImages})
 
-
+# New Entry Form Page
 def newEntry(request):
+	# Redirect to login page if user not logged in
 	if not request.session.get('username'):
 		return redirect('/login')
-	# ImageFormSet = modelformset_factory(EntryImage,fields = ('image',))
+
+	# Creating new image form for the new entry
 	ImageFormSet = modelformset_factory(EntryImage, form = EntryImageForm, extra = 5)
 	if request.method == 'POST':
+		# Getting the submitted data
 		entry_form = NewEntryForm(request.POST)
 		formset = ImageFormSet(request.POST, request.FILES, queryset = EntryImage.objects.none())
+
+		# Validitating that the two forms
 		if entry_form.is_valid() and formset.is_valid():
-			# Getting all the information from form and current user logged in
+			# Getting all data submitted and the user information
 			numOfDescriptions = entry_form.cleaned_data['numOfDescriptions']
 			username = request.session.get('username')
 			author = User.objects.get(username = username)
 
 			# Creating a new entry with given info
 			newEntry = Entry(title = entry_form.cleaned_data['title'], author = author, numOfDescriptions = entry_form.cleaned_data['numOfDescriptions'])
+
+			# Collecting all the images and descriptions submitted
 			if entry_form.is_valid() and formset.is_valid():
 				img_count = 0
 				img_entries_list = []
@@ -163,6 +183,7 @@ def newEntry(request):
 					ImageFormSet = ImageFormSet(queryset=EntryImage.objects.none())
 					return render(request, 'newEntry.html', {'entryform':new_form, 'message':message, 'imageformset':ImageFormSet})
 				else:
+					# Success message for new entry
 					message = "You Have Successfully Added A New Entry!"
 					# Saving New Entry and All New Entry Images 
 					newEntry.save()
@@ -170,55 +191,10 @@ def newEntry(request):
 						img_entry.save()
 					return redirect('homepage') # redirecting to homepage to show new entry
 	else:
+		# Original form for the initial new entry page display
 		form = NewEntryForm()
 		ImageFormSet = ImageFormSet(queryset=EntryImage.objects.none())
 		return render(request, 'newEntry.html', {'entryform':form, 'imageformset':ImageFormSet})
-
-
-
-def editEntry(request, entry_id):
-	try:
-		entry_image_form = EntryImageForm()
-		entry = Entry.objects.get(id = entry_id)
-		if request.method == 'POST':
-			entry_image_form = EntryImageForm(request.POST)
-			if entry_image_form.is_valid():
-				print('form is valid')
-			else:
-				print('form is not valid')
-	except Entry.DoesNotExist:
-		raise Http404(f'Entry with id {entry_id} does not exist')
-	return render(request, 'editEntry.html', {'entry':entry, 'imageform':entry_image_form})
-
-
-# def editEntry(request, entry_id):
-# 	try:
-# 		entry = Entry.objects.get(id = entry_id)
-# 		images = EntryImage.objects.all()
-# 		entry_image_form = 'test form'
-		# print('before new form')
-		# entry_image_form = EntryImageForm()
-		# print('new form created')
-		# if request.method == 'POST':
-		# 	entry_image_form = EntryImageForm(request.POST)
-		# 	if entry_image_form.is_valid():
-		# 		print('form is valid')
-		# 	else:
-		# 		print('form is not valid')
-	# except Entry.DoesNotExist:
-	# 	raise Http404(f'Entry with id {entry_id} does not exist')
-	# return render(request, 'editEntry.html', {'entry':entry, 'images':images, 'imageform':entry_image_form})
-
-	# if request.method == 'POST':
-	# 	entry_image_form = EntryImageForm(request.POST)
-	# 	if entry_image_form.is_valid():
-	# 		message = 'You entered %s and image %s' % (entry_image_form.cleaned_data['entry'],
-	# 			entry_image_form.cleaned_data['image'])
-	# 		new_form2 = EntryImageForm()
-	# 		return render(request, 'editEntry.html', {'message':message, 'imageform':new_form2})
-	# 	else:
-	# 		form = EntryImageForm()
-	# 		return render(request, 'editEntry.html', {'imageform':form})
 
 # Credit to https://stackoverflow.com/questions/20177779/how-can-i-change-form-field-values-after-calling-the-is-valid-method/45050312
 # Credit to https://stackoverflow.com/questions/18534307/change-a-form-value-before-validation-in-django-form

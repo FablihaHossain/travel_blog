@@ -7,21 +7,23 @@
 <body class = "body-html body-size">
 	<h4 class = "text-center"> Title: {{entry.title}} </h4>
 	<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
-	  <div class="carousel-inner">
+	<div class="carousel-inner">
+	<!-- The first image in the entry is the active carousel item-->
   	{% for image in images %}
 	  	{% if forloop.first %}
 	    	<div class="carousel-item active" >
 	    {% else %}
 	    	<div class="carousel-item" >
 	    {% endif %}
-
+	     <!-- Displaying the appropriate images and their respective descriptions in the carousel-->
 	      <img src="{{image.image.url}}" class="d-block" alt="..." height="400px">
 	      <div class="carousel-caption d-md-block">
 	        <p>{{image.description}}</p>
 	      </div>
     </div>
-		{% endfor %}
+	{% endfor %}
   </div>
+  <!-- Carousel previous and next buttons -->
   <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-bs-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
     <span class="visually-hidden" style="color:purple">Previous</span>

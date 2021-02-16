@@ -12,6 +12,7 @@
 		<div class ="jumbotron">
 			<div class = "container text-center form-words" style="height: 40px"> Add A New Travel Entry Here </div>
 				<div class = "text-center">
+					<!-- Fields for the new entry form -->
 					{% for field in entryform %}
 					<row class = "form-group form-fields">
 						{{field.errors}}
@@ -22,6 +23,7 @@
 					</row>
 					{% endfor %}
 				</div> 
+				<!-- Image file upload links and respective text fields for description-->
 				<div class = "text-center">
 					{{ imageformset.management_form }}
 		    			{% for form in imageformset %}
@@ -31,6 +33,7 @@
 				</div>
 			</div>
 
+			<!-- Entry Submit Button -->
 			<div class = "form-group text-center">
 				<button type = "submit" class = "btn btn-primary btn-primary-block"> Enter Entry </button>
 			</div>

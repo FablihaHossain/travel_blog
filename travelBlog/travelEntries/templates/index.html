@@ -15,11 +15,11 @@
 	<!-- Navigation Bar for Site --> 
 	<nav class = "navbar navbar-expand-sm justify-content-right">
 		<a class = "navbar-brand nav-words navbar-text" href="{% url 'index' %}"> Travel Blog </a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style = "background-color: white">
 		<span class="navbar-toggler-icon"></span>
 		</button>
 
-		<div class= "collapse navbar-collapse" id="navbarNav">
+		<div class= "collapse navbar-collapse col" id="navbarNav">
 		<!-- Login Route -->
 			{% if not request.session.username %}
 			<li class = "nav-item">
@@ -32,12 +32,11 @@
 			{% endif %}
 
 			{% if request.session.username %}
+			<!-- Updated Welcome Page with User Dashboard -->
 			<li class = "nav-item">
-				<a class = "nav-link nav-words navbar-text" href="{% url 'homepage' %}"> View All Entries </a>
+				<a class = "nav-link nav-words navbar-text" href="{% url 'index' %}"> My Dashboard </a>
 			</li>
-			<li class = "nav-item">
-				<a class = "nav-link nav-words navbar-text" href="{% url 'newEntry' %}"> Add New Entry </a>
-			</li>
+			<!-- Logout of the site -->
 			<li class = "nav-item">
 				<a class = "nav-link nav-words navbar-text" href="{% url 'logout' %}"> Logout </a>
 			</li>
@@ -48,32 +47,34 @@
 {% block content %}
 <body class = "body-html body-size">
 	<div class = "text-center">
+		<!-- Travel Blog Logo -->
 		<img src="/static/Images/TravelBlogLogo-trans.png" style = "height:150; width: 150">
 
+		<!-- General welcome and routes to the login and registration pages -->
 		{% if not request.session.username %}
-			<h3> Welcome Fellow Travel Lover! </h3>
-			<br>
+			<h3 style = "font-family: Copperplate, sans-serif"> Welcome Fellow Travel Lover! </h3>
 				<div class = "text-center">
-					Please log in and share your recent journey <a href="{% url 'login' %}" class="btn btn-primary btn-primary-block">Login</a>
+					Please <a href="{% url 'login' %}">log in here </a> and share your recent journey
 				</div>
 				<br>
 				<div class = "text-center">
-					Don't Have An Account? Register Here! <a href="{% url 'register' %}" class="btn btn-primary btn-primary-block">Register</a>
+					Don't Have An Account? <br> <a href="{% url 'register' %}" class="btn btn-primary btn-primary-block">Register Now!</a>
 				</div>
 		{% endif %}
 
+		<!-- Welcome page for user with dashboad menu -->
 		{% if request.session.username %}
 			<h3> Welcome {{theUser.name}}! </h3>
 			<ul class = "list-group">
 				<li class = "list-group-item disabled"> Dashboard</li>
 				<li class = "list-group-item"> 
-					<a href="{% url 'homepage' %}">View All Entries</a>
+					<a href="{% url 'homepage' %}"> View All Entries</a>
 				</li>
 				<li class = "list-group-item">
-					<a href="{% url 'newEntry' %}">Create New Entry</a>
+					<a href="{% url 'newEntry' %}"> Create New Entry</a>
 				</li>
 				<li class = "list-group-item">
-					<a href="{% url 'logout' %}">Log Out of Account</a>
+					<a href="{% url 'logout' %}"> Log Out of Account</a>
 				</li>
 			</ul>
 		{% endif %}
@@ -81,6 +82,7 @@
 </body>
 {% endblock content %}
 	<div class = "footer text-center">
+		<!-- License Information -->
 		<a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License</a>.
 		</div>
 	</div>
