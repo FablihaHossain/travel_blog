@@ -1,5 +1,6 @@
-# <img src = "travelBlog/static/Files/Logo/TravelBlogLogo.png" width = "150" height = "150"></img> Developed by Fabliha Hossain
-### A Django Project Implemented with a PostgreSQL Backend
+# <img src = "travelBlog/static/Files/Logo/TravelBlogLogo.png" width = "150" height = "150"></img> A Django Project Implemented with a PostgreSQL Backend
+### Developed by Fabliha Hossain
+
 
 **Project Objective:** After discovering and implementing websites with Python Flask, I wanted to see how it compares to the Django Web Framework. This particular site allows users to share their travel journies with other travelors around the world.
 
