@@ -122,3 +122,8 @@
 	width: 250px;
 	background-color: #e6e6ff
 }
+
+.col {
+	background-color: #993366;
+	justify-content: flex-end;
+}
