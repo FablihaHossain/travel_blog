@@ -1,4 +1,4 @@
-# TravelBlog ![TravelBlogLogo](travelBlog/static/Files/Logo/TravelBlogLogo-trans.png =150x150)
+# TravelBlog ![TravelBlogLogo](https://github.com/FablihaHossain/travel_blog/blob/master/travelBlog/static/Files/Logo/TravelBlogLogo.png =150x150)
 ## Developed by Fabliha Hossain
 ### A Django Project Implemented with a PostgreSQL Backend
 
